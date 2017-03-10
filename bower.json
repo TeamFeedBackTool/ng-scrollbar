@@ -1,0 +1,11 @@
+{
+  "name": "ng-scrollbar",
+  "version": "0.1.0",
+  "author": "Benjamin Such",
+  "license": "MIT",
+  "homepage": "https://github.com/benjaminsuch/ng-scrollbar",
+  "main": "src/ng-scrollbar.js",
+  "devDependencies": {
+    "angular": "1.5.10"
+  }
+}

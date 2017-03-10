@@ -1,0 +1,72 @@
+@track-size: 6px;
+@track-border-radius: 8px;
+@track-bg: rgba(200, 200, 200, .6);
+@scrollbar-bg: darken(@track-bg, 10%);
+@scrollbar-size: @track-size;
+@scrollbar-border-radius: @track-border-radius;
+
+.ng-scrollbar {
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+
+  .ng-scrollbar-transcluded {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .ng-scrollbar-track-y,
+  .ng-scrollbar-track-x {
+    position: absolute;
+    background-color: @track-bg;
+    border-radius: @track-border-radius;
+    display: none;
+
+    &,
+    .ng-scrollbar-thumb {
+      transition: background-color .2s ease-in-out;
+    }
+
+    &:hover {
+      background-color: darken(@track-bg, 10%);
+
+      > .ng-scrollbar-thumb {
+        background-color: darken(@scrollbar-bg, 10%);
+
+        &.scrollable {
+          background-color: darken(@scrollbar-bg, 20%);
+        }
+      }
+    }
+
+    // Disbaled means visible, but not usable
+    &.disabled {
+
+    }
+
+    &.visible {
+      display: block;
+    }
+  }
+
+  .ng-scrollbar-track-y {
+    width: @track-size;
+    top: 0;
+    right: 0;
+    height: 100%;
+  }
+
+  .ng-scrollbar-track-x {
+    height: @track-size;
+    left: 0;
+    bottom: 0;
+  }
+
+  .ng-scrollbar-thumb {
+    position: absolute;
+    width: 100%;
+    background-color: @scrollbar-bg;
+    border-radius: @scrollbar-border-radius;
+  }
+}
