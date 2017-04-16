@@ -6,9 +6,9 @@ change without declaring and observing scope properties.
 ngScrollbar can be fully customized using css (a .less file is provided). Still no jQuery used.
 
 ### Installation
-You have two way:
+You have two ways:
 
-First: Clone the repository and install all dependencies. This required npm and gulp to be installed.
+First: Clone the repository and install all dependencies. This requires npm and gulp to be installed.
 ```sh
 git clone https://github.com/benjaminsuch/ng-scrollbar.git
 cd ng-scrollbar
