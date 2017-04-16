@@ -23,7 +23,7 @@
 				display: block;
 				width: 1440px;
 				height: 420px;
-				margin: 15px;
+				border: 10px solid red;
 				background-color: #909069;
 			}
 			.myList {
@@ -57,36 +57,29 @@
 		<script type="text/javascript">
 			var app = angular.module('example', ['ngScrollbar']);
 
-			app.controller('TestController', function($scope) {
-				this.scrollbarConfig = {
-					enableY: true,
-					enableX: true,
-					enableButtons: false,
-					enableWheel: true,
-					rebuildOnResize: true,
-					rollToEnd: false
-				};
+			app.controller('TestController', function($scope, $scrollbar) {
+				this.scrollbarConfig = $scrollbar.config();
 
 				this.name = '';
 
 				this.items = [
-								'Albrecht',
-								'Adam',
-								'Benjamin',
-								'Theodore',
-								'Tim',
-								'Max',
-								'Susan',
-								'Eugene',
-								'Pamela',
-								'Yusuff',
-								'Spongebob Squarepants',
-								'Chris',
-								'Alexander',
-								'Zoey',
-								'Xavier',
-								'Simon',
-								'Evelyn'
+					'Albrecht',
+					'Adam',
+					'Benjamin',
+					'Theodore',
+					'Tim',
+					'Max',
+					'Susan',
+					'Eugene',
+					'Pamela',
+					'Yusuff',
+					'Spongebob Squarepants',
+					'Chris',
+					'Alexander',
+					'Zoey',
+					'Xavier',
+					'Simon',
+					'Evelyn'
 				];
 
 				this.addItem = function() {

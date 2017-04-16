@@ -4,7 +4,33 @@
 
   const app = angular.module('ngScrollbar', []);
 
-  app.directive('ngScrollbar', ['$parse', $parse => {
+  app.provider('$scrollbar', [function $scrollbarProvider() {
+    let config = {
+      enableY: true,
+      enableX: true,
+      enableButtons: false,
+      enableWheel: true,
+      wheelSpeed: 25,
+      rebuildOnResize: true,
+      rollToEnd: false
+    };
+
+    this.config = function(_config_) {
+      Object.assign(config, _config_);
+    };
+
+    this.$get = [() => {
+      const $scrollbar = {
+        config: (_config_ = {}) => {
+          return Object.assign(config, _config_);
+        }
+      };
+
+      return $scrollbar;
+    }];
+  }]);
+
+  app.directive('ngScrollbar', ['$parse', '$scrollbar', ($parse, $scrollbar) => {
     return {
       restrict: 'A',
       transclude: true,
@@ -22,17 +48,8 @@
       link: (scope, element, attrs) => {
         element.addClass('ng-scrollbar');
 
-        const defaultConfig = {
-          enableY: true,
-          enableX: false,
-          enableButtons: false,
-          enableWheel: true,
-          wheelSpeed: 25,
-          rebuildOnResize: true,
-          rollToEnd: false
-        };
-
-        let config = {};
+        let config = $scrollbar.config();
+        let activeTrack = null;
 
         let offsetX = 0, lastOffsetX = 0;
         let offsetY = 0, lastOffsetY = 0;
@@ -56,10 +73,13 @@
           event.preventDefault();
 
           const parent = angular.element(event.target).parent();
+          angular.element(parent).addClass('active');
 
           if (parent.hasClass('ng-scrollbar-track-y')) {
+            activeTrack = jqTrackY;
             lastOffsetY = event.pageY - thumbY.offsetTop;
-          } else {
+          } else if (parent.hasClass('ng-scrollbar-track-x')) {
+            activeTrack = jqTrackX;
             lastOffsetX = event.pageX - thumbX.offsetTop;
           }
 
@@ -70,17 +90,16 @@
         function mousemove(event) {
           event.stopPropagation();
 
-          const parent = angular.element(event.target).parent();
           let top = 0, left = 0;
 
-          if (parent.hasClass('ng-scrollbar-track-y')) {
+          if (activeTrack === jqTrackY) {
             offsetY = event.pageY - thumbY.scrollTop - lastOffsetY;
             top = Math.max(0, Math.min(
               trackY.offsetHeight - thumbY.offsetHeight,
               offsetY
             ));
             moveY(top);
-          } else {
+          } else if (activeTrack === jqTrackX) {
             offsetX = event.pageX - thumbX.scrollTop - lastOffsetX;
             left = Math.max(0, Math.min(
               trackX.offsetWidth - thumbX.offsetWidth,
@@ -92,6 +111,9 @@
 
         function mouseup(event) {
           event.preventDefault();
+
+          activeTrack.removeClass('active');
+
           document.removeEventListener('mousemove', mousemove);
           document.removeEventListener('mouseup', mouseup);
         }
@@ -189,6 +211,7 @@
             ));
             jqThumbX.css({width: width + 'px'});
 
+            console.log(width, element[0]);
             if (width !== element[0].offsetWidth && config.enableY) {
               jqTrackX.addClass('visible');
             } else {
@@ -199,6 +222,7 @@
               moveX(element[0].offsetWidth - thumbX.offsetWidth);
             }
           }
+
           if (height !== null) {
             height = Math.max(0, Math.min(
               (element[0].offsetHeight / height * element[0].offsetHeight),
@@ -237,7 +261,7 @@
         }
 
         scope.$watchCollection($parse(attrs.ngScrollbar), val => {
-          angular.extend(config, defaultConfig, val);
+          angular.extend(config, val);
           init();
         });
 
@@ -296,9 +320,9 @@
     if (pY && !sY) { sY = (pY < 1) ? -1 : 1; }
 
     return { spinX  : sX,
-             spinY  : sY,
-             pixelX : pX,
-             pixelY : pY };
+      spinY  : sY,
+      pixelX : pX,
+      pixelY : pY };
   }
 
 })();

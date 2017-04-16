@@ -55,6 +55,17 @@
     top: 0;
     right: 0;
     height: 100%;
+    transition: width .15s linear;
+
+    &.active,
+    &:hover {
+      width: @track-size + 6;
+
+      .ng-scrollbar-thumb {
+        width: @track-size + 2;
+        margin: 0 2px;
+      }
+    }
   }
 
   .ng-scrollbar-track-x {
