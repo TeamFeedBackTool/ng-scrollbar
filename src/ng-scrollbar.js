@@ -211,7 +211,6 @@
             ));
             jqThumbX.css({width: width + 'px'});
 
-            console.log(width, element[0]);
             if (width !== element[0].offsetWidth && config.enableY) {
               jqTrackX.addClass('visible');
             } else {
